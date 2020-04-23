@@ -1,13 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const mongoose = require('mongoose')
 const Url = require('../models/url.js')
-const shortUrlDomain = 'https://app.com/'
+const shortUrlDomain = 'http://localhost:3000/'
 
 // 產出五碼 key (大小寫英數字元)
-function generateKey() {
+function generateKey(keyLength) {
   const characters = []
-  const keyLength = 5
   const key = []
 
   // characters 陣列放入 0-9, A-Z, a-z
@@ -23,15 +21,14 @@ function generateKey() {
     characters.push(String.fromCharCode(k))
   }
 
-  // 隨機生成五碼 key
+  // 隨機生成 key
   for (let l = 0; l < keyLength; l++) {
     const index = Math.floor(Math.random() * characters.length)
     key.push(characters[index])
   }
 
-  return key.join(' ')
+  return key.join('')
 }
-
 
 
 // 取回建立短網址的頁面
@@ -41,31 +38,30 @@ router.get('/', (req, res) => {
 
 // 送出原始網址到 server 處理
 router.post('/', (req, res) => {
-  const originalUrl = req.body.originalUrl
-
-  Url.findOne({ originalUrl: originalUrl })
-    .then(url => {
+  console.log('req body', req.body)
+  Url.findOne({ originalUrl: req.body.originalUrl })
+    .lean()
+    .exec(url => {
       if (url) {
+        console.log('found original url')
         res.render('/generated', {
           originalUrl,
           shortUrlKey,
           shortUrl: shortUrlDomain + shortUrlKey
         })
       } else {
-        const newUrlKey = new Url({
-          originalUrl,
-          shortUrlKey: generateKey()
+        console.log('new original url')
+        const newUrlRecord = new Url({
+          originalUrl: req.body.originalUrl,
+          shortUrlKey: generateKey(5)
         })
+        console.log('new url key', newUrlRecord)
+        console.log('new url key created')
 
-        newUrlKey.save()
-          .then(url => {
-            res.render('/', {
-              originalUrl,
-              shortUrlKey,
-              shortUrl: shortUrlDomain + shortUrlKey
-            })
-          })
-
+        newUrlRecord.save(err => {
+          if (err) return console.log(err)
+          return res.redirect('/generated')
+        })
       }
     })
 
@@ -76,12 +72,15 @@ router.post('/', (req, res) => {
 
 // 取回建立的短網址
 router.get('/generated', (req, res) => {
-  res.render('generated')
+  res.render('generated', { shortUrl: 'test' })
 })
 
 // redirect 到原來的網址
 router.get('/:key', (req, res) => {
   res.send('get original url')
 })
+
+
+
 
 module.exports = router

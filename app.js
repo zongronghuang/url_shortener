@@ -22,6 +22,7 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
+
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }))
