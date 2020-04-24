@@ -1,13 +1,13 @@
 <div class="mt-5">
-  {{#if shortUrl}}
-    <input type="text" id="shortUrl" value="{{shortUrl}}">
+  {{#if shortUrlKey}}
+    <input type="text" id="shortUrl" value="{{domain}}{{shortUrlKey}}" class="w-50">
   {{/if}}
 
   <form action="/" method="POST">
     <div class="form-group">
       <label for="originalUrl"></label>
       <input type="url" class="form-control w-75 mx-auto" id="originalUrl" name="originalUrl" aria-describedby="urlHelp"
-        placeholder="Enter a URL to make short" value="{{{originalUrl}}}">
+        placeholder="Enter a URL to make short" value="{{originalUrl}}">
     </div>
 
     <button type="submit" class="btn btn-primary">Get Short URL</button>

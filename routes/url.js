@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Url = require('../models/url.js')
-const shortUrlDomain = 'http://localhost:3000/'
+const domain = 'http://localhost:3000/'
 
-// 產出五碼 key (大小寫英數字元)
+// 產出大小寫英數字元組成的 key
 function generateKey(keyLength) {
   const characters = []
   const key = []
@@ -36,44 +36,45 @@ router.get('/', (req, res) => {
   res.render('index')
 })
 
-// 送出原始網址到 server 處理
-router.post('/', (req, res) => {
-  console.log('req body', req.body)
+// 送出原始網址到 server 處理 + 記錄
+router.post('/', (req, res, next) => {
   Url.findOne({ originalUrl: req.body.originalUrl })
     .lean()
-    .exec(url => {
-      if (url) {
-        console.log('found original url')
-        res.render('/generated', {
-          originalUrl,
-          shortUrlKey,
-          shortUrl: shortUrlDomain + shortUrlKey
+    .exec((err, url) => {
+      if (err) return console.log(err)
+
+      console.log('url', url)
+      if (url) {                            // 如果 url 已存在於資料庫
+        console.log('found old url')
+        console.log('url object', url)
+        console.log('url short key', url.shortUrlKey)
+        res.locals.shortUrlKey = url.shortUrlKey
+
+        return res.render('generated', {
+          originalUrl: res.locals.originalUrl,
+          domain,
+          shortUrlKey: res.locals.shortUrlKey
         })
-      } else {
-        console.log('new original url')
+      } else {                              // 如果 url 不存在於資料庫
         const newUrlRecord = new Url({
           originalUrl: req.body.originalUrl,
           shortUrlKey: generateKey(5)
         })
-        console.log('new url key', newUrlRecord)
-        console.log('new url key created')
+
+        res.locals.shortUrlKey = newUrlRecord.shortUrlKey
 
         newUrlRecord.save(err => {
           if (err) return console.log(err)
-          return res.redirect('/generated')
+          return res.render('generated', {
+            originalUrl: res.locals.originalUrl,
+            domain,
+            shortUrlKey: res.locals.shortUrlKey
+          })
         })
       }
     })
-
-
-
-
 })
 
-// 取回建立的短網址
-router.get('/generated', (req, res) => {
-  res.render('generated', { shortUrl: 'test' })
-})
 
 // redirect 到原來的網址
 router.get('/:key', (req, res) => {

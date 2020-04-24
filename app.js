@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const flash = require('connect-flash')
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/record',
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/url',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/record',
   }
 )
 
+// 連線至 mongodb
 const db = mongoose.connection
 db.on('error', () => {
   console.log('mongodb error')
@@ -22,13 +23,20 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
-
+// 設定 view engine
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
 }))
 app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// 建立 res.locals 變數群
+app.use((req, res, next) => {
+  res.locals.originalUrl = req.body.originalUrl
+  res.locals.shortUrlKey = 'testtttt'
+  next()
+})
 
 // 分流路由
 app.use('/', require('./routes/url.js'))
