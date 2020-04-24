@@ -77,8 +77,19 @@ router.post('/', (req, res, next) => {
 
 
 // redirect 到原來的網址
-router.get('/:key', (req, res) => {
-  res.send('get original url')
+router.get('/:shortUrlKey', (req, res) => {
+
+  if (req.params.shortUrlKey !== 'favicon.ico') {
+    console.log('key', req.params.shortUrlKey)
+
+    Url.findOne({ shortUrlKey: req.params.shortUrlKey })
+      .lean()
+      .exec((err, url) => {
+        console.log('fetched url', url)
+        console.log('fetched original url', url.originalUrl)
+        res.redirect(`${url.originalUrl}`)
+      })
+  }
 })
 
 
