@@ -29,6 +29,9 @@ app.engine('handlebars', exphbs({
 }))
 app.set('view engine', 'handlebars')
 
+// 指定靜態資料夾
+app.use(express.static('public'))
+
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // 建立 res.locals 變數群

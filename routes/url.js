@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Url = require('../models/url.js')
-const urlExistSync = require('url-exist-sync')
-const { generateKey } = require('../public/generateKey.js')
+const { generateKey } = require('../public/javascripts/generateKey.js')
 const domain = 'http://localhost:3000/'
 
 // 取回建立短網址的頁面
@@ -17,21 +16,9 @@ router.post('/', (req, res, next) => {
     .exec((err, url) => {
       if (err) return console.log(err)
 
-      const urlExistence = urlExistSync(req.body.originalUrl)
-      console.log('url', url)
-
-      // 檢查 original url 是否存在
-      if (urlExistence) {
-        console.log('url found')
-      } else {
-        console.log('no such url found')
-        return res.redirect('/')
-      }
-
       if (url) {                            // 如果 url 紀錄已存在於資料庫
-        console.log('found old url')
-        console.log('url object', url)
-        console.log('url short key', url.shortUrlKey)
+        console.log('This URL found in the database', url)
+
         res.locals.shortUrlKey = url.shortUrlKey
 
         return res.render('generated', {
@@ -62,22 +49,19 @@ router.post('/', (req, res, next) => {
 
 // 從 key 取回原來的網址，然後 redirect 到原來的網址
 router.get('/:shortUrlKey', (req, res) => {
-
+  // 略過 favicon.ico 的 request
   if (req.params.shortUrlKey !== 'favicon.ico') {
-    console.log('key', req.params.shortUrlKey)
-
     Url.findOne({ shortUrlKey: req.params.shortUrlKey })
       .lean()
       .exec((err, url) => {
         if (err) return console.log(err)
-        console.log('fetched url', url)
+        console.log('URL record fetched from the database', url)
 
         if (url) {
           res.redirect(`${url.originalUrl}`)
         } else {
           res.render('error')
         }
-
       })
   }
 })
