@@ -25,3 +25,5 @@ function generateKey(keyLength) {
 
   return key.join('')
 }
+
+module.exports = { generateKey }

@@ -1,35 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Url = require('../models/url.js')
+const urlExistSync = require('url-exist-sync')
+const { generateKey } = require('../public/generateKey.js')
 const domain = 'http://localhost:3000/'
-
-// 產出大小寫英數字元組成的 key
-function generateKey(keyLength) {
-  const characters = []
-  const key = []
-
-  // characters 陣列放入 0-9, A-Z, a-z
-  for (let i = 0; i <= 9; i++) {
-    characters.push(i)
-  }
-
-  for (let j = 65; j <= 90; j++) {
-    characters.push(String.fromCharCode(j))
-  }
-
-  for (let k = 97; k <= 122; k++) {
-    characters.push(String.fromCharCode(k))
-  }
-
-  // 隨機生成 key
-  for (let l = 0; l < keyLength; l++) {
-    const index = Math.floor(Math.random() * characters.length)
-    key.push(characters[index])
-  }
-
-  return key.join('')
-}
-
 
 // 取回建立短網址的頁面
 router.get('/', (req, res) => {
@@ -43,8 +17,18 @@ router.post('/', (req, res, next) => {
     .exec((err, url) => {
       if (err) return console.log(err)
 
+      const urlExistence = urlExistSync(req.body.originalUrl)
       console.log('url', url)
-      if (url) {                            // 如果 url 已存在於資料庫
+
+      // 檢查 original url 是否存在
+      if (urlExistence) {
+        console.log('url found')
+      } else {
+        console.log('no such url found')
+        return res.redirect('/')
+      }
+
+      if (url) {                            // 如果 url 紀錄已存在於資料庫
         console.log('found old url')
         console.log('url object', url)
         console.log('url short key', url.shortUrlKey)
@@ -55,7 +39,7 @@ router.post('/', (req, res, next) => {
           domain,
           shortUrlKey: res.locals.shortUrlKey
         })
-      } else {                              // 如果 url 不存在於資料庫
+      } else {                              // 如果 url 紀錄不存在於資料庫
         const newUrlRecord = new Url({
           originalUrl: req.body.originalUrl,
           shortUrlKey: generateKey(5)
@@ -76,7 +60,7 @@ router.post('/', (req, res, next) => {
 })
 
 
-// redirect 到原來的網址
+// 從 key 取回原來的網址，然後 redirect 到原來的網址
 router.get('/:shortUrlKey', (req, res) => {
 
   if (req.params.shortUrlKey !== 'favicon.ico') {
@@ -85,14 +69,17 @@ router.get('/:shortUrlKey', (req, res) => {
     Url.findOne({ shortUrlKey: req.params.shortUrlKey })
       .lean()
       .exec((err, url) => {
+        if (err) return console.log(err)
         console.log('fetched url', url)
-        console.log('fetched original url', url.originalUrl)
-        res.redirect(`${url.originalUrl}`)
+
+        if (url) {
+          res.redirect(`${url.originalUrl}`)
+        } else {
+          res.render('error')
+        }
+
       })
   }
 })
-
-
-
 
 module.exports = router
