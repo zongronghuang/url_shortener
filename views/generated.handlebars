@@ -1,6 +1,7 @@
 <div class="mt-5 mb-3">
   {{#if shortUrlKey}}
-    <h3 id="shortUrl" class="w-75 overflow-auto mx-auto">{{domain}}{{shortUrlKey}}</h3>
+    <h3 id="shortUrl" class="overflow-auto mx-auto">{{domain}}{{shortUrlKey}}</h3>
+    <button type="button" id="copy" class="btn btn-info">Copy</button>
   {{/if}}
 
   <form action="/" method="POST">

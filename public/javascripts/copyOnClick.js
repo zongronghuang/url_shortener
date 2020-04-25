@@ -1,6 +1,7 @@
 const shortUrl = document.querySelector('#shortUrl')
+const copyBtn = document.querySelector('#copy')
 
-shortUrl.addEventListener('click', () => {
+copyBtn.addEventListener('click', () => {
   const input = document.createElement('input')
 
   input.value = shortUrl.textContent
@@ -9,4 +10,5 @@ shortUrl.addEventListener('click', () => {
   document.execCommand('copy')
   shortUrl.removeChild(input)
   console.log('url copied')
+  copyBtn.textContent = 'Done'
 })
