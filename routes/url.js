@@ -40,6 +40,11 @@ router.post('/', (req, res, next) => {
               shortUrlKey: res.locals.shortUrlKey
             })
           } else {                              // 如果 url 紀錄不存在於資料庫
+            const key = generatedKey(5)
+
+            // 檢查 key 是否已被別的網址使用 
+
+
             const newUrlRecord = new Url({
               originalUrl: req.body.originalUrl,
               shortUrlKey: generateKey(5)
