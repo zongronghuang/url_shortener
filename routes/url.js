@@ -3,6 +3,7 @@ const router = express.Router()
 const Url = require('../models/url.js')
 const { generateKey } = require('../public/javascripts/generateKey.js')
 const domain = 'http://localhost:3000/'
+const urlExist = require('url-exist')
 
 // 取回建立短網址的頁面
 router.get('/', (req, res) => {
@@ -16,33 +17,54 @@ router.post('/', (req, res, next) => {
     .exec((err, url) => {
       if (err) return console.log(err)
 
-      if (url) {                            // 如果 url 紀錄已存在於資料庫
-        console.log('This URL found in the database', url)
+      // 確認輸入的網址是否存在在網路上
+      let existence
 
-        res.locals.shortUrlKey = url.shortUrlKey
+      (async () => {
+        existence = await urlExist(req.body.originalUrl)
 
-        return res.render('generated', {
-          originalUrl: res.locals.originalUrl,
-          domain,
-          shortUrlKey: res.locals.shortUrlKey
-        })
-      } else {                              // 如果 url 紀錄不存在於資料庫
-        const newUrlRecord = new Url({
-          originalUrl: req.body.originalUrl,
-          shortUrlKey: generateKey(5)
-        })
+        console.log('existence', existence)
 
-        res.locals.shortUrlKey = newUrlRecord.shortUrlKey
+        if (existence) {
+          // URL 活在網路上
+          console.log('URL alive!')
 
-        newUrlRecord.save(err => {
-          if (err) return console.log(err)
-          return res.render('generated', {
-            originalUrl: res.locals.originalUrl,
-            domain,
-            shortUrlKey: res.locals.shortUrlKey
+          if (url) {                            // 如果 url 紀錄已存在於資料庫
+            console.log('URL found in the database', url)
+
+            res.locals.shortUrlKey = url.shortUrlKey
+
+            return res.render('generated', {
+              originalUrl: req.body.originalUrl,
+              domain,
+              shortUrlKey: res.locals.shortUrlKey
+            })
+          } else {                              // 如果 url 紀錄不存在於資料庫
+            const newUrlRecord = new Url({
+              originalUrl: req.body.originalUrl,
+              shortUrlKey: generateKey(5)
+            })
+
+            res.locals.shortUrlKey = newUrlRecord.shortUrlKey
+
+            newUrlRecord.save(err => {
+              if (err) return console.log(err)
+              return res.render('generated', {
+                originalUrl: req.body.originalUrl,
+                domain,
+                shortUrlKey: res.locals.shortUrlKey
+              })
+            })
+          }
+        } else {
+          // URL 不存在在網路上
+          console.log('DEAD URL!')
+          return res.render('index', {
+            originalUrl: req.body.originalUrl,
+            warning_msg: '輸入的網址不存在'
           })
-        })
-      }
+        }
+      })()
     })
 })
 

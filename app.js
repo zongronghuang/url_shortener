@@ -4,7 +4,6 @@ const port = 3000
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const flash = require('connect-flash')
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/url',
   {
@@ -31,13 +30,11 @@ app.set('view engine', 'handlebars')
 
 // 指定靜態資料夾
 app.use(express.static('public'))
-
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // 建立 res.locals 變數群
 app.use((req, res, next) => {
-  res.locals.originalUrl = req.body.originalUrl
-  res.locals.shortUrlKey = 'testtttt'
+  res.locals.shortUrlKey = ''
   next()
 })
 
