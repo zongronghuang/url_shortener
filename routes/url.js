@@ -15,7 +15,7 @@ router.post('/', (req, res, next) => {
   Url.findOne({ originalUrl: req.body.originalUrl })
     .lean()
     .exec((err, url) => {
-      if (err) return console.log(err)
+      if (err) return console.log('error', err)
 
       // 確認輸入的網址是否存在在網路上
       let existence
@@ -40,10 +40,22 @@ router.post('/', (req, res, next) => {
               shortUrlKey: res.locals.shortUrlKey
             })
           } else {                              // 如果 url 紀錄不存在於資料庫
-            const key = generatedKey(5)
+            // // 檢查 key 是否和資料庫中的其他 key 重複
+            // let key = generateKey(5)
+            // let keyCheck = true
+            // while (keyCheck) {
+            //   Url.findOne({ shortUrlKey: key }, (err, url) => {
+            //     console.log('in the while loop')
+            //     if (err) return console.log(err)
 
-            // 檢查 key 是否已被別的網址使用 
-
+            //     if (url) {
+            //       console.log('Repeated key found!')
+            //       key = generateKey(5)
+            //     } else {
+            //       keyCheck = false
+            //     }
+            //   })
+            // }
 
             const newUrlRecord = new Url({
               originalUrl: req.body.originalUrl,

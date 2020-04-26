@@ -10,5 +10,5 @@ copyBtn.addEventListener('click', () => {
   document.execCommand('copy')
   shortUrl.removeChild(input)
   console.log('url copied')
-  copyBtn.textContent = 'Done'
+  copyBtn.textContent = 'URL Copied'
 })
