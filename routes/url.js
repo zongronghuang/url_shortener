@@ -4,6 +4,7 @@ const Url = require('../models/url.js')
 const { generateKey } = require('../public/javascripts/generateKey.js')
 const urlExist = require('url-exist')
 
+// 依照執行環境，判斷 domain 名稱
 let domain
 if (process.env.NODE_ENV === 'production') {
   domain = 'https://mysimpleurlshortener.herokuapp.com/'
