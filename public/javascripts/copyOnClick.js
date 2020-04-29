@@ -9,6 +9,6 @@ copyBtn.addEventListener('click', () => {
   input.select()
   document.execCommand('copy')
   shortUrl.removeChild(input)
-  console.log('url copied')
-  copyBtn.textContent = 'URL Copied'
+  console.log('已複製短網址')
+  copyBtn.textContent = '已複製'
 })

@@ -1,7 +1,7 @@
 <div class="mt-5 mb-3">
   {{#if shortUrlKey}}
     <h3 id="shortUrl" class="mx-auto">{{domain}}{{shortUrlKey}}</h3>
-    <button type="button" id="copy" class="btn btn-info mt-1">Copy</button>
+    <button type="button" id="copy" class="btn btn-info mt-1">複製</button>
   {{/if}}
 
   <form action="/" method="POST">
@@ -11,6 +11,6 @@
         placeholder="輸入網址" value="{{originalUrl}}">
     </div>
 
-    <button type="submit" class="btn btn-primary">Get Short URL</button>
+    <button type="submit" class="btn btn-primary">取得短網址</button>
   </form>
 </div>
