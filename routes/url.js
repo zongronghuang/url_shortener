@@ -12,79 +12,101 @@ router.get('/', (req, res) => {
 
 // 送出原始網址到 server 處理 + 記錄
 router.post('/', (req, res, next) => {
+  // 確認網址是否存在在網路上
+  const checkUrlExistence = async () => {
+    const existence = await urlExist(req.body.originalUrl)
+    return existence
+  }
+
+  checkUrlExistence()
+    .then(existence => {
+      // 網址欄位沒有輸入任何字元
+      // 回傳錯誤訊息
+      if (req.body.originalUrl.length === 0) {
+        console.log('網址不可為空白')
+
+        res.render('index', {
+          originalUrl: req.body.originalUrl,
+          warning_msg: '網址不可為空白'
+        })
+      } else {
+        // 判斷輸入的網址是否存在
+        // 網址不存在 => 回傳錯誤訊息
+        // 網址存在 => 下個 middleware 再處理
+        if (existence === false) {
+          console.log('網址不存在')
+
+          res.render('index', {
+            originalUrl: req.body.originalUrl,
+            warning_msg: '此網址不存在，無法建立短網址'
+          })
+        } else {
+          console.log('網址存在')
+
+          next()
+        }
+      }
+    })
+}, (req, res) => {
   Url.findOne({ originalUrl: req.body.originalUrl })
     .lean()
     .exec((err, url) => {
       if (err) return console.log('error', err)
 
-      // 確認輸入的網址是否存在在網路上
-      let existence
+      // 確認網址是否已經存在在資料庫
+      // 資料庫內找得到 => 回傳已有資料
+      // 資料庫內找不到 => 建立新紀錄
+      if (url) {
+        console.log('資料庫中已紀錄此網址', url)
 
-      (async () => {
-        existence = await urlExist(req.body.originalUrl)
+        return res.render('generated', {
+          originalUrl: req.body.originalUrl,
+          domain,
+          shortUrlKey: url.shortUrlKey
+        })
+      } else {
+        // 建立新紀錄需要的 key
+        // 確認 key 是否和資料庫中的其他 key 重複
+        // 重複的話，再重新建 key
+        let key = generateKey(5)
 
-        console.log('existence', existence)
-
-        if (existence) {
-          // URL 活在網路上
-          console.log('URL alive!')
-
-          if (url) {                            // 如果 url 紀錄已存在於資料庫
-            console.log('URL found in the database', url)
-
-            res.locals.shortUrlKey = url.shortUrlKey
-
-            return res.render('generated', {
-              originalUrl: req.body.originalUrl,
-              domain,
-              shortUrlKey: res.locals.shortUrlKey
-            })
-          } else {                              // 如果 url 紀錄不存在於資料庫
-            // // 檢查 key 是否和資料庫中的其他 key 重複
-            // let key = generateKey(5)
-            // let keyCheck = true
-            // while (keyCheck) {
-            //   Url.findOne({ shortUrlKey: key }, (err, url) => {
-            //     console.log('in the while loop')
-            //     if (err) return console.log(err)
-
-            //     if (url) {
-            //       console.log('Repeated key found!')
-            //       key = generateKey(5)
-            //     } else {
-            //       keyCheck = false
-            //     }
-            //   })
-            // }
-
-            const newUrlRecord = new Url({
-              originalUrl: req.body.originalUrl,
-              shortUrlKey: generateKey(5)
-            })
-
-            res.locals.shortUrlKey = newUrlRecord.shortUrlKey
-
-            newUrlRecord.save(err => {
+        const checkKey = () => {
+          Url.findOne({ shortUrlKey: key })
+            .lean()
+            .exec((err, url) => {
               if (err) return console.log(err)
-              return res.render('generated', {
-                originalUrl: req.body.originalUrl,
-                domain,
-                shortUrlKey: res.locals.shortUrlKey
-              })
+
+              if (url) {
+                console.log('資料庫中發現重複的 key')
+
+                return checkKey()
+              }
             })
-          }
-        } else {
-          // URL 不存在在網路上
-          console.log('DEAD URL!')
-          return res.render('index', {
-            originalUrl: req.body.originalUrl,
-            warning_msg: '輸入的網址不存在'
-          })
         }
-      })()
+
+        checkKey()
+
+        // 建立新紀錄
+        const newUrlRecord = new Url({
+          originalUrl: req.body.originalUrl,
+          shortUrlKey: key
+        })
+
+        // 將新紀錄存回至資料庫中
+        newUrlRecord.save(err => {
+          if (err) return console.log(err)
+          console.log('儲存新紀錄到資料庫')
+
+          return res.render('generated', {
+            originalUrl: req.body.originalUrl,
+            domain,
+            shortUrlKey: key
+          })
+        })
+
+      }
     })
 })
-
 
 // 從 key 取回原來的網址，然後 redirect 到原來的網址
 router.get('/:shortUrlKey', (req, res) => {
@@ -94,7 +116,7 @@ router.get('/:shortUrlKey', (req, res) => {
       .lean()
       .exec((err, url) => {
         if (err) return console.log(err)
-        console.log('URL record fetched from the database', url)
+        console.log('從資料庫取回已有的紀錄', url)
 
         if (url) {
           res.redirect(`${url.originalUrl}`)
