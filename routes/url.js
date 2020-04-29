@@ -2,8 +2,14 @@ const express = require('express')
 const router = express.Router()
 const Url = require('../models/url.js')
 const { generateKey } = require('../public/javascripts/generateKey.js')
-const domain = 'http://localhost:3000/'
 const urlExist = require('url-exist')
+
+let domain
+if (process.env.NODE_ENV === 'production') {
+  domain = 'https://mysimpleurlshortener.herokuapp.com/'
+} else {
+  domain = 'http://localhost:3000/'
+}
 
 // 取回建立短網址的頁面
 router.get('/', (req, res) => {

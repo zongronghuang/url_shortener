@@ -32,12 +32,6 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// 建立 res.locals 變數群
-app.use((req, res, next) => {
-  res.locals.shortUrlKey = ''
-  next()
-})
-
 // 分流路由
 app.use('/', require('./routes/url.js'))
 
