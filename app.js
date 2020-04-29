@@ -42,6 +42,6 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/url.js'))
 
 // 監聽 server 啟動狀態
-app.listen(port, (req, res) => {
+app.listen(process.env.PORT || port, (req, res) => {
   console.log(`Server up and running at http://localhost:${port}`)
 })
