@@ -14,7 +14,7 @@ Alpha Camp 學期三期末考迷你專案[<sup>1</sup>](#1)
 
 1. 從 GitHub 下載此專案：
 ```
-    git clone https://github.com/zongronghuang/url_shortener.git url_shortener
+git clone https://github.com/zongronghuang/url_shortener.git url_shortener
 ``` 
 2. 前往 **url_shortener** 資料夾。
 
