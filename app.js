@@ -4,6 +4,8 @@ const port = 3000
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const json = require('./ui_strings/enu.json')
+const ui = JSON.stringify(json)
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/url',
   {
@@ -31,6 +33,12 @@ app.set('view engine', 'handlebars')
 // 指定靜態資料夾
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
+
+// 存放多國語字串
+app.use((req, res, next) => {
+  res.locals.ui = JSON.parse(ui).app
+  next()
+})
 
 // 分流路由
 app.use('/', require('./routes/url.js'))
