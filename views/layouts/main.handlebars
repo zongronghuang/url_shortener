@@ -10,14 +10,26 @@
   <title>{{ui.title}}</title>
 </head>
 
-<body class="w-50 text-center mx-auto border border-info bg-light rounded-lg mt-5">
+<body>
+  <nav>
+    <label for="lang">語言：</label>
+    <select id="lang">
+      <option value="enu">English</option>
+      <option value="cht">繁體中文</option>
+    </select>
+  </nav>
 
-  <div>
-    <h1 class="mt-5">{{ui.header}}</h1>
-    <i class="fas fa-link display-1 mt-4"></i>
+  <div class="w-50 text-center mx-auto border border-info bg-light rounded-lg mt-5">
+
+    <div>
+      <h1 class="mt-5">{{ui.header}}</h1>
+      <i class="fas fa-link display-1 mt-4"></i>
+    </div>
+
+    {{{body}}}
+
   </div>
 
-  {{{body}}}
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

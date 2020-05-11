@@ -4,8 +4,6 @@ const port = 3000
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const json = require('./ui_strings/enu.json')
-const ui = JSON.stringify(json)
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/url',
   {
@@ -34,8 +32,11 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// 存放多國語字串
+// 導入多國語字串
 app.use((req, res, next) => {
+  const json = require('./ui_strings/cht.json')
+  const ui = JSON.stringify(json)
+
   res.locals.ui = JSON.parse(ui).app
   next()
 })
