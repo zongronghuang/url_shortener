@@ -1,10 +1,12 @@
 {
   "app": {
+    "lang": "zh",
     "title": "短網址產生器",
     "header": "短網址產生器",
     "generate_button": "取得短網址",
     "input_placeholder": "輸入網址",
     "copy_button": "複製",
+    "copied": "已複製",
     "error_header": "錯誤",
     "error_description": "輸入的網址不正確或系統忙碌中。請檢查輸入的網址或稍後再試。",
     "error_reminder": "需要短網址嗎？",

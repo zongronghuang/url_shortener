@@ -14,7 +14,8 @@ if (process.env.NODE_ENV === 'production') {
 
 // 取回建立短網址的頁面
 router.get('/', (req, res) => {
-  res.render('index')
+  console.log('i am in the route', req.app.locals.lang)
+  res.render('index', { [req.app.locals.lang]: true })
 })
 
 // 送出原始網址到 server 處理 + 記錄
@@ -34,7 +35,8 @@ router.post('/', (req, res, next) => {
 
         res.render('index', {
           originalUrl: req.body.originalUrl,
-          warning_msg: '網址不可為空白'
+          warning_msg: '網址不可為空白',
+          [req.app.locals.lang]: true
         })
       } else {
         // 判斷輸入的網址是否存在
@@ -45,7 +47,8 @@ router.post('/', (req, res, next) => {
 
           res.render('index', {
             originalUrl: req.body.originalUrl,
-            warning_msg: '此網址不存在，無法建立短網址'
+            warning_msg: '此網址不存在，無法建立短網址',
+            [req.app.locals.lang]: true
           })
         } else {
           console.log('網址存在')
@@ -69,7 +72,8 @@ router.post('/', (req, res, next) => {
         return res.render('generated', {
           originalUrl: req.body.originalUrl,
           domain,
-          shortUrlKey: url.shortUrlKey
+          shortUrlKey: url.shortUrlKey,
+          [req.app.locals.lang]: true
         })
       } else {
         // 建立新紀錄需要的 key
@@ -107,7 +111,8 @@ router.post('/', (req, res, next) => {
           return res.render('generated', {
             originalUrl: req.body.originalUrl,
             domain,
-            shortUrlKey: key
+            shortUrlKey: key,
+            [req.app.locals.lang]: true
           })
         })
 
@@ -128,7 +133,7 @@ router.get('/:shortUrlKey', (req, res) => {
         if (url) {
           res.redirect(`${url.originalUrl}`)
         } else {
-          res.render('error')
+          res.render('error', { [req.app.locals.lang]: true })
         }
       })
   }

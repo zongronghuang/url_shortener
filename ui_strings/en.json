@@ -1,10 +1,12 @@
 {
   "app": {
+    "lang": "en",
     "title": "URL Shortener",
     "header": "URL Shortener",
     "generate_button": "Get Short Url",
     "input_placeholder": "Enter a URL",
     "copy_button": "Copy",
+    "copied": "Copied",
     "error_header": "Error",
     "error_description": "You entered an incorrect URL or the system is busy. Check the input URL or try again later.",
     "error_reminder": "Need a short URL?",

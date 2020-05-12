@@ -37,19 +37,28 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use((req, res, next) => {
   if (req.originalUrl !== '/favicon.ico') {
     let json
+    let lang = req.query.lang || app.locals.lang
 
-    if (req.query.lang === 'cht') {
-      json = require('./ui_strings/cht.json')
+    console.log('app lang', app.locals.lang)
+    console.log('query lang', req.query.lang)
+
+    if (lang === 'zh') {
+      json = require('./ui_strings/zh.json')
+      app.locals.lang = 'zh'
     } else {
-      json = require('./ui_strings/enu.json')
+      json = require('./ui_strings/en.json')
+      app.locals.lang = 'en'
     }
 
+    console.log('app lang 2', app.locals.lang)
     const ui = JSON.stringify(json)
-    res.locals.ui = JSON.parse(ui).app
-    res.locals.lang = req.query.lang
+
+    app.locals.ui = JSON.parse(ui).app
+
     next()
   }
 })
+
 // 分流路由
 app.use('/', require('./routes/url.js'))
 
