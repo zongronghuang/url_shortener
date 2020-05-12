@@ -32,15 +32,24 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
+
 // 導入多國語字串
 app.use((req, res, next) => {
-  const json = require('./ui_strings/cht.json')
-  const ui = JSON.stringify(json)
+  if (req.originalUrl !== '/favicon.ico') {
+    let json
 
-  res.locals.ui = JSON.parse(ui).app
-  next()
+    if (req.query.lang === 'cht') {
+      json = require('./ui_strings/cht.json')
+    } else {
+      json = require('./ui_strings/enu.json')
+    }
+
+    const ui = JSON.stringify(json)
+    res.locals.ui = JSON.parse(ui).app
+    res.locals.lang = req.query.lang
+    next()
+  }
 })
-
 // 分流路由
 app.use('/', require('./routes/url.js'))
 

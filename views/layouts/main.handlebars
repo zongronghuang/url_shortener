@@ -12,11 +12,13 @@
 
 <body>
   <nav>
-    <label for="lang">語言：</label>
-    <select id="lang">
-      <option value="enu">English</option>
-      <option value="cht">繁體中文</option>
-    </select>
+    <form action="/" method="GET">
+      <label for="lang"></label>
+      <select id="lang" name="lang" onchange="this.form.submit()">
+        <option value="enu">English</option>
+        <option value="cht">繁體中文</option>
+      </select>
+    </form>
   </nav>
 
   <div class="w-50 text-center mx-auto border border-info bg-light rounded-lg mt-5">
