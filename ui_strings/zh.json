@@ -9,7 +9,7 @@
     "unreal_url_msg": "輸入的網址不存在 :(",
     "empty_url_msg": "忘記輸入網址囉 :(",
     "error_header": "錯誤",
-    "error_description": "輸入的網址不正確或系統忙碌中。請檢查輸入的網址或稍後再試。",
+    "error_description": "網址不正確或系統忙碌中。請檢查輸入的網址或稍後再試。",
     "error_reminder": "需要短網址嗎？",
     "error_redirector": "前往"
   }
