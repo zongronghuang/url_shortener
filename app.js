@@ -25,7 +25,9 @@ db.once('open', () => {
 // 設定 view engine
 app.engine('handlebars', exphbs({
   defaultLayout: 'main'
-}))
+})
+)
+
 app.set('view engine', 'handlebars')
 
 // 指定靜態資料夾
@@ -39,9 +41,7 @@ app.use((req, res, next) => {
     let json
     let lang = req.query.lang || app.locals.lang
 
-    console.log('app lang', app.locals.lang)
-    console.log('query lang', req.query.lang)
-
+    // 不同語言導入不同的 JSON 檔
     if (lang === 'zh') {
       json = require('./ui_strings/zh.json')
       app.locals.lang = 'zh'
@@ -50,9 +50,10 @@ app.use((req, res, next) => {
       app.locals.lang = 'en'
     }
 
-    console.log('app lang 2', app.locals.lang)
+    // JSON 轉成字串
     const ui = JSON.stringify(json)
 
+    // JSON 轉成 JavaScript 物件
     app.locals.ui = JSON.parse(ui).app
 
     next()

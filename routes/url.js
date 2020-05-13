@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Url = require('../models/url.js')
-const { generateKey } = require('../public/javascripts/generateKey.js')
+const { generateKey } = require(`../public/javascripts/generateKey.js`)
 const urlExist = require('url-exist')
 
 // 依照執行環境，判斷 domain 名稱
@@ -14,7 +14,6 @@ if (process.env.NODE_ENV === 'production') {
 
 // 取回建立短網址的頁面
 router.get('/', (req, res) => {
-  console.log('i am in the route', req.app.locals.lang)
   res.render('index', { [req.app.locals.lang]: true })
 })
 

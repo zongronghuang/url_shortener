@@ -12,9 +12,14 @@ copyBtn.addEventListener('click', () => {
   shortUrl.removeChild(input)
   console.log('已複製短網址')
 
-  // const path = `../../ui_strings/${lang}.json`
-  // console.log('path', path)
-  // const json = require(path)
-  // const ui = JSON.parse(json).app
-  // copyBtn.textContent = ui.copied
+  if (lang === 'en') {
+    copyBtn.textContent = 'Copied!'
+  }
+
+  if (lang === 'zh') {
+    copyBtn.textContent = '已複製！'
+  }
 })
+
+
+
