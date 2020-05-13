@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
 
         res.render('index', {
           originalUrl: req.body.originalUrl,
-          warning_msg: '網址不可為空白',
+          empty_url: true,
           [req.app.locals.lang]: true
         })
       } else {
@@ -46,7 +46,7 @@ router.post('/', (req, res, next) => {
 
           res.render('index', {
             originalUrl: req.body.originalUrl,
-            warning_msg: '此網址不存在，無法建立短網址',
+            unreal_url: true,
             [req.app.locals.lang]: true
           })
         } else {
