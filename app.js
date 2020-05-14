@@ -50,11 +50,7 @@ app.use((req, res, next) => {
       app.locals.lang = 'en'
     }
 
-    // JSON 轉成字串
-    const ui = JSON.stringify(json)
-
-    // JSON 轉成 JavaScript 物件
-    app.locals.ui = JSON.parse(ui).app
+    app.locals.ui = json.app
 
     next()
   }

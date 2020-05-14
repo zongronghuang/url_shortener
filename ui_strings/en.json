@@ -3,7 +3,7 @@
     "lang": "en",
     "title": "URL Shortener",
     "header": "URL Shortener",
-    "generate_button": "Get Short Url",
+    "generate_button": "Get Short URL",
     "input_placeholder": "Enter a URL",
     "copy_button": "Copy",
     "unreal_url_msg": "The URL is not real :(",
