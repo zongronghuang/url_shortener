@@ -1,6 +1,8 @@
 {
   "app": {
     "lang": "en",
+    "en_option": "English",
+    "zh_option": "繁體中文",
     "title": "URL Shortener",
     "header": "URL Shortener",
     "generate_button": "Get Short URL",

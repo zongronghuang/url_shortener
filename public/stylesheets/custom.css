@@ -1,0 +1,8 @@
+body {
+  background-image: linear-gradient(to right , #b3bde4, #adeca4);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#frame {
+  background-color: transparent;
+}

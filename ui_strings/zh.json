@@ -1,6 +1,8 @@
 {
   "app": {
     "lang": "zh",
+    "en_option": "English",
+    "zh_option": "繁體中文",
     "title": "短網址產生器",
     "header": "短網址產生器",
     "generate_button": "取得短網址",
