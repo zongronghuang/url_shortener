@@ -8,25 +8,35 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
   <link rel="stylesheet" href="/stylesheets/custom.css">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2:wght@500&display=swap" rel="stylesheet">
   <title>{{ui.title}}</title>
 </head>
 
 <body>
-  <nav class="text-center mt-5 bg-info display-5 py-1">
+  <nav class="text-center mt-5 display-5 py-1">
     <form action="/" method="GET">
       <label for="lang"></label>
-      <select class="py-2 rounded-lg" id="lang" name="lang" onchange="this.form.submit()">
+      <select class="py-2 bg-transparent" id="lang" name="lang" onchange="this.form.submit()">
         <option value="en" {{#if en}} selected {{/if}}>{{ui.en_option}}</option>
         <option value="zh" {{#if zh}} selected {{/if}}>{{ui.zh_option}}</option>
       </select>
     </form>
   </nav>
 
-  <div class="w-50 text-center mx-auto border border-info rounded-lg mt-5" id="frame">
-    <div>
-      <h1 class="mt-5">{{ui.header}}</h1>
-      <i class="fas fa-link display-4 mt-4"></i>
-    </div>
+  <div class="w-50 text-center mx-auto mt-5" id="frame">
+
+    {{#if error}}
+      <div>
+        <h1 class="mt-5">{{ui.error_header}}</h1>
+        <i class="fas fa-exclamation-circle display-4 mt-2"></i>
+      </div>
+    {{else }}
+      <div>
+        <h1 class="mt-5">{{ui.header}}</h1>
+        <i class="fas fa-link display-4 mt-2"></i>
+      </div>
+    {{/if}}
+
 
     {{{body}}}
   </div>

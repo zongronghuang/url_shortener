@@ -1,16 +1,16 @@
 <div class="mt-5 mb-3">
   {{#if shortUrlKey}}
-    <h4 id="shortUrl" class="mx-auto overflow-auto">{{domain}}{{shortUrlKey}}</h4>
-    <button type="button" id="copy" class="btn btn-info mt-1">{{ui.copy_button}}</button>
+    <h4 id="shortUrl" class="mx-auto">{{domain}}{{shortUrlKey}}</h4>
+    <button type="button" id="copy" class="btn btn-info shadow-sm mt-1">{{ui.copy_button}}</button>
   {{/if}}
 
   <form action="/" method="POST">
     <div class="form-group mx-2">
       <label for="originalUrl"></label>
-      <input type="url" class="form-control mx-auto" id="originalUrl" name="originalUrl" aria-describedby="urlHelp"
+      <input type="url" class="form-control mx-auto py-4" id="originalUrl" name="originalUrl" aria-describedby="urlHelp"
         placeholder="{{ui.input_placeholder}}" value="{{originalUrl}}">
     </div>
 
-    <button type="submit" class="btn btn-primary">{{ui.generate_button}}</button>
+    <button type="submit" class="btn btn-primary shadow-sm mt-3">{{ui.generate_button}}</button>
   </form>
 </div>

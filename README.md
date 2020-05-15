@@ -53,5 +53,7 @@ git clone https://github.com/zongronghuang/url_shortener.git url_shortener
 
 4. 如果輸入錯誤的短網址，則會導向錯誤頁面。
 
+5. 提供英文及繁體中文介面：按一下工作列中的語言清單，即可切換介面顯示語言。
+
 ---
 <a class="anchor" id="1">1</a>: 此專案及所有內容皆作為學習用途，並無侵犯著作權之意圖。

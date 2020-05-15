@@ -132,7 +132,10 @@ router.get('/:shortUrlKey', (req, res) => {
         if (url) {
           res.redirect(`${url.originalUrl}`)
         } else {
-          res.render('error', { [req.app.locals.lang]: true })
+          res.render('error', {
+            error: true,
+            [req.app.locals.lang]: true
+          })
         }
       })
   }
