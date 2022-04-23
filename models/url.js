@@ -1,14 +1,15 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 const urlSchema = new Schema({
   originalUrl: {
     type: String,
-    required: true
+    required: true,
   },
   shortUrlKey: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
+const URL = mongoose.model("Url", urlSchema);
 
-module.exports = mongoose.model('Url', urlSchema)
+export default URL;
