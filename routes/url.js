@@ -4,13 +4,15 @@ import { generateKey } from "../public/utils/generateKey.js";
 import urlExist from "url-exist";
 
 const router = express.Router();
+const localHostDomainName = "http://localhost:3000/";
+const herokuDomainName = "https://makeurlsimple.herokuapp.com/";
 
 // 依照執行環境，判斷 domain 名稱
 let domain;
 if (process.env.NODE_ENV === "production") {
-  domain = "http://makeurlsimple/";
+  domain = herokuDomainName;
 } else {
-  domain = "http://localhost:3000/";
+  domain = localHostDomainName;
 }
 
 // 取回建立短網址的頁面
@@ -123,8 +125,9 @@ router.post(
 );
 
 // 從 key 取回原來的網址，然後 redirect 到原來的網址
-router.get("/:shortUrlKey", (req, res) => {
+router.get(`${domain}/:shortUrlKey`, (req, res) => {
   // 略過 favicon.ico 的 request
+  console.log("req", req);
   if (req.params.shortUrlKey !== "favicon.ico") {
     Url.findOne({ shortUrlKey: req.params.shortUrlKey })
       .lean()
