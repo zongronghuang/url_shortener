@@ -8,7 +8,7 @@ const router = express.Router();
 // 依照執行環境，判斷 domain 名稱
 let domain;
 if (process.env.NODE_ENV === "production") {
-  domain = "https://mysimpleurlshortener.herokuapp.com/";
+  domain = "https://nanourl/";
 } else {
   domain = "http://localhost:3000/";
 }
