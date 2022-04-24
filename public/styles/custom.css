@@ -1,4 +1,14 @@
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
+  width: 100vw;
+  height: 100vh;
   background-image: linear-gradient(to right ,#03dbfc, #adeca4);
   font-family: 'Baloo Chettan 2', Arial, Helvetica, sans-serif;
 }
@@ -7,16 +17,16 @@ nav {
   background-image: linear-gradient(to left ,#03dbfc, #adeca4);
 }
 
-button, select, .alert, #originalUrl, #shortUrl {
-  border-radius: 10px;
+select, .alert, #originalUrl, #shortUrl {
   font-weight: bold;
   border-width: 0px;
 }
 
-.alert, #originalUrl {
-  max-width: 500px;
+.copy-btn {
+  width: 100px;
 }
 
 #frame {
   background-color: transparent;
+  min-width: 500px;
 }
