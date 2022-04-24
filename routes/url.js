@@ -83,7 +83,8 @@ router.post(
           // 建立新紀錄需要的 key
           // 確認 key 是否和資料庫中的其他 key 重複
           // 重複的話，再重新建 key
-          let key = generateKey(5);
+          const keyLength = 5;
+          let key = generateKey(keyLength);
 
           const checkKey = () => {
             Url.findOne({ shortUrlKey: key })
@@ -93,7 +94,6 @@ router.post(
 
                 if (url) {
                   console.log("資料庫中發現重複的 key");
-
                   return checkKey();
                 }
               });
@@ -125,26 +125,26 @@ router.post(
 );
 
 // 從 key 取回原來的網址，然後 redirect 到原來的網址
-router.get(`${domain}/:shortUrlKey`, (req, res) => {
+router.get("/:shortUrlKey", (req, res) => {
   // 略過 favicon.ico 的 request
-  console.log("req", req);
-  if (req.params.shortUrlKey !== "favicon.ico") {
-    Url.findOne({ shortUrlKey: req.params.shortUrlKey })
-      .lean()
-      .exec((err, url) => {
-        if (err) return console.log(err);
-        console.log("從資料庫取回已有的紀錄", url);
-
-        if (url) {
-          res.redirect(`${url.originalUrl}`);
-        } else {
-          res.render("error", {
-            error: true,
-            [req.app.locals.lang]: true,
-          });
-        }
-      });
+  if (req.params.shortUrlKey === "favicon.ico") {
+    return;
   }
+  Url.findOne({ shortUrlKey: req.params.shortUrlKey })
+    .lean()
+    .exec((err, url) => {
+      if (err) return console.log(err);
+      console.log("從資料庫取回已有的紀錄", url);
+
+      if (url) {
+        res.redirect(`${url.originalUrl}`);
+      } else {
+        res.render("error", {
+          error: true,
+          [req.app.locals.lang]: true,
+        });
+      }
+    });
 });
 
 export default router;
