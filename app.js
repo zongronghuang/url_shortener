@@ -17,8 +17,8 @@ const port = 3000;
  * 不過，在 CommonJS 模式下，不能使用 ES6 module 的 import/export 語法
  */
 const require = createRequire(import.meta.url);
-const chtStrings = require("./ui_strings/zh.json");
-const enuStrings = require("./ui_strings/en.json");
+const chtStrings = require("./assets/ui_strings/zh.json");
+const enuStrings = require("./assets/ui_strings/en.json");
 
 // mongodb 設定
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/url", {

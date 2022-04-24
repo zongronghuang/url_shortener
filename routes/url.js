@@ -1,6 +1,6 @@
 import express from "express";
 import Url from "../models/url.js";
-import { generateKey } from "../public/javascripts/generateKey.js";
+import { generateKey } from "../public/utils/generateKey.js";
 import urlExist from "url-exist";
 
 const router = express.Router();
