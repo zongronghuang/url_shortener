@@ -1,0 +1,33 @@
+@use 'basics';
+body {
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to right, #03dbfc, #adeca4);
+  font-family: 'Baloo Chettan 2', Arial, Helvetica, sans-serif;
+}
+
+nav {
+  background-image: linear-gradient(to right, #adeca4, #03dbfc);
+}
+
+select,
+.alert,
+.original-url,
+.short-url {
+  font-weight: bold;
+  border-width: 0px;
+}
+
+.app-main {
+  background-color: transparent;
+  min-width: 500px;
+}
+
+.app-main.copy-btn {
+  width: 90px;
+}
+
+.app-main.short-url {
+  line-height: 1.2;
+}
+/*# sourceMappingURL=index.css.map */

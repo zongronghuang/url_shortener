@@ -1,0 +1,39 @@
+@use 'basics';
+@import 'colors';
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to right, $bg-blue, $bg-green);
+  font-family: 'Baloo Chettan 2', Arial, Helvetica, sans-serif;
+}
+
+nav {
+  background-image: linear-gradient(to right, $bg-green, $bg-blue);
+}
+
+select,
+.alert,
+.original-url,
+.short-url {
+  font-weight: bold;
+  border-width: 0px;
+}
+
+.app-main {
+  background-color: transparent;
+  min-width: 500px;
+
+  &.copy-btn {
+    width: 90px;
+  }
+
+  &.short-url {
+    line-height: 1.2;
+  }
+}
+
+
+
+
+
